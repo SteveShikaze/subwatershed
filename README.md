@@ -4,6 +4,6 @@
 - hydrologically corrected regional DEM (HDEM)
 - flow path and watershed delineation
 
-site is published at https://owrc.github.io/watertable/
+site is published at https://owrc.github.io/subwatershed/
 
 
