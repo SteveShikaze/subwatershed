@@ -1,0 +1,61 @@
+---
+title: "Topographical analysis of the ORMGP region"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+  encoding=encoding,
+  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "Oak Ridges Moraine Groundwater Program"
+date: "22/11/2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+---
+
+
+# Introduction
+
+The ORMGP jurisdiction is subdivided to 2,9XX ~10km² sub-watersheds. Every sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to neighbouring downstream sub-watersheds, and so on. The intent is to use these sub-watersheds as "logical unit" for climatological and water budget analyses.
+
+Below is a description of the processing of a Provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface.
+
+## Digital Elevation Model (DEM)
+Ground surface elevations were collected from the 2006 version of the Provincial (Ministry of Natural Resources) Digital Elevation Model. This is a 10x10m² DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5m contours where the photogrammetic elevation points did not exist. A 50x50m² Digital Elevation Model (DEM) is produced by merging the tiles shown below:
+
+```{r fig.asp = 0.8, fig.width = 7, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(geojsonio)
+library(sf)
+
+spGL <- geojson_read("shp/greatLakes.geojson",  what="sp")
+spMNR <- geojson_read("shp/MNR_2006-tiles.geojson",  what="sp")
+spORMGP <- geojson_read("shp/ORMGP-region.geojson",  what="sp")
+spYPDTH <- geojson_read("shp/YPDTH.geojson",  what="sp")
+
+spMNR_points <- as.data.frame(do.call(rbind, lapply(spMNR@polygons, function(x) x@labpt))) # Convert nested list to data frame by column
+names(spMNR_points) <- c('long','lat') 
+spMNR_points$num = spMNR$NUMBER
+
+ggplot() +
+    geom_polygon(data=spGL, aes(x=long, y=lat, group=group), fill="#51a8ff", color="#51a8ff") +
+    geom_polygon(data=spYPDTH, aes(x=long, y=lat, group=group), fill=NA, color="brown", size=1) +
+    geom_polygon(data=spORMGP, aes(x=long, y=lat, group=group), fill=NA, color="orange4", size=1) +
+    geom_polygon(data=spMNR, aes(x=long, y=lat, group=group), fill=NA, color="darkgreen",size=1) +
+    
+    geom_text(data=spMNR_points, aes(x=long, y=lat, label=num), color="darkgreen") +
+    
+    theme_bw() + theme(axis.title = element_blank(), title = element_blank()) +
+    #labs(x='longitude',y='latitude', title="MNR 2006 Provincial DEM tiles shown in green.") +
+    coord_sf(xlim=c(-81, -77), ylim=c(43, 45.75), expand=FALSE)
+
+```
+
+Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50m² cell. The resulting grid is a 5000x5000 50m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
+
+
+## BLAH
+
+![ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM)](fig/regional-hdem.png)
+
