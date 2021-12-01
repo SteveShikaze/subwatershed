@@ -1,0 +1,33 @@
+﻿Value,SOLRIS class name,ELC code,Description ,Canopy,Surface,PerImp,PerCov
+11,Open Beach/Bar ,BBO,"Unconsolidated mineral substrates. Subject to active shoreline processes: ice scour, wave energy, erosion, and deposition. Tree cover < 25%; shrub cover <25%.",Open,Barren,,
+21,Open Sand Dune ,SDO,Exposed sands formed by extant or historical shoreline or Aeolian processes. Subject to active processes/ <25% vegetative cover.,Open,Barren,,
+23,Treed Sand Dune,SDT,Exposed sands formed by extant or historical shoreline or Aeolian processes. Subject to active processes/ 25% < tree cover < 60%.,MixedVegetation,Barren,,0.50
+41,Open Cliff and Talus,CTO,Vertical or near- vertical exposed bedrock > 3 m in height/ slopes of rock rubble at the base of cliffs. Subject to active processes/ < 25% vegetative cover.,Open,Barren,,
+43,Treed Cliff and Talus,CTT,Vertical or near- vertical exposed bedrock > 3 m in height/ slopes of rock rubble at the base of cliffs. Subject to active processes/ 25% < vegetative cover < 60%.,MixedVegetation,Barren,,0.50
+51,Open Alvar ,ALO,"Level, unfractured limestone (carbonate) bedrock/ patchy mosaic of bare rock pavement and shallow substrates (< 15 cm) over bedrock/ vegetative cover < 25%.",Open,Barren,,
+52,Shrub Alvar,ALS,"Level, unfractured limestone (carbonate) bedrock/ patchy mosaic of bare rock pavement and shallow substrates (< 15 cm) over bedrock/ tree cover < 25%; shrub cover => 25%.",Shrub,Barren,,0.25
+53,Treed Alvar ,ALO,"Level, unfractured limestone (carbonate) bedrock/ patchy mosaic of bare rock pavement and shallow substrates (< 15 cm) over bedrock/ 25% < tree cover < 60%.",MixedVegetation,Barren,,0.50
+64,Open Bedrock,,"Primarily non- calcareous bedrock features, confined to the Canadian Shield in ecoregion 5E. Tree cover < 10%",Open,Barren,,
+65,Sparse Treed,,"60% < tree cover < 10%. Confined to the Canadian Shield in ecoregion 5E. Tree communities often situated on non-calcareous bedrock features, rapidly draining soils, or raised mineral soils.",MixedVegetation,ShortVegetation,,0.40
+81,Open Tallgrass Prairie,TPO,Ground layer dominated by prairie graminoids; variable cover of open-grown trees/ Tree cover <= 25%; shrub cover <= 25%.,Open,ShortVegetation,,0.10
+82,Tallgrass Savannah,TPS,Ground layer dominated by prairie graminoids; variable cover of open-grown trees/ 25% < tree cover < 35%.,MixedVegetation,ShortVegetation,,0.35
+83,Tallgrass Woodland,TPW,Ground layer dominated by prairie graminoids; variable cover of open-grown trees/ 35% < tree cover < 60%.,MixedVegetation,TallVegetation,,0.85
+90,Forest,FO,Tree cover > 60%. Upland tree species > 75% canopy cover > 2m in height.,MixedVegetation,Forest,,1.00
+91,Coniferous Forest,FOC,Tree cover > 60%. Upland coniferous tree species > 75% canopy cover > 2m in height.,Coniferous,Forest,,1.00
+92,Mixed Forest,FOM,Tree cover > 60%. Upland coniferous tree species > 25% and deciduous tree species > 25% of canopy cover > 2m in height.,MixedVegetation,Forest,,1.00
+93,Deciduous Forest,FOD,Tree cover > 60%. Upland deciduous tree species > 75% canopy cover > 2m in height.,Deciduous,Forest,,1.00
+131,Treed Swamp,SWC/SWM/SWD,"Treed communities. Water table seasonally or permanently at, near, or above substrate surface/ Tree cover > 25%. Dominated by hydrophytic tree and shrub species.",MixedVegetation,Swamp,,0.50
+135,Thicket Swamp ,SWT,"Open and shrub communities. Water table seasonally or permanently at, near, or above substrate surface/ Tree cover <= 25%; hydrophytic shrubs > 25%. Dominated by hydrophytic tree and shrub species.",MixedVegetation,Swamp,,0.50
+140,Fen,FE,"Mineotrophic peatland. Open, shrub and treed communities. Water table seasonally or permanently at, near, or above substrate surface/ Tree cover (trees > 2m height) <= 25%. sedges, grasses, and low (< 2m) shrubs dominate, sedge and brown moss substrate.",Open,Wetland,,0.25
+150,Bog,BO,"Ombrotrophic peatland. Open, shrub and treed communities. Water table seasonally or permanently at, near, or above substrate surface/ Tree cover (trees > 2m height) <= 25% sphagnum peat substrate.",Open,Wetland,,0.25
+160,Marsh,MA,"Open and shrub communities. Water table seasonally or permanently at, near, or above substrate surface – tree and shrub cover <=25%. Dominated by emergent hydrophytic macrophytes.",Shrub,Marsh,,0.25
+170,Open Water,OA,"Water depth > 2 meters. Lake trophic status. No macrophyte vegetation, trees or shrub cover.",Open,Waterbody,,
+191,Plantations – Tree Cultivated,CUP,"Tree cover > 60%, (trees > 2m height), linear organization, uniform tree type.",MixedVegetation,TallVegetation,,0.85
+192,Hedge Rows,CUH,"Tree cover > 60%, (trees > 2m height), linear arrangement, minimum 10 meters width, maximum 30 meters width.",Shrub,DenseVegetation,,0.85
+193,Tilled,,"Agricultural fields managed as continuous annual row crops inferred from 3 observed sequential time periods over a 10 year time period. There can be as many as 2 time periods where fields are rotated with perennial crops. (e.g., hay, improved pasture)",Open,Agriculture,,
+201,Transportation,COT,"Highways, roads. ",Open,Barren,0.85,
+202,Built-Up Area– Pervious,COP,"Urban recreation areas. (i.e., golf courses, playing fields)",MixedVegetation,Urban,0.10,0.10
+203,Built-Up Area– Impervious,COI,"Residential, industrial, commercial, and civic areas.",Open,Urban,0.90,
+204,Extraction–Aggregate,COE,"Pits, quarries.",Open,noflow,,
+205,Extraction –Peat/Topsoil,,Peat and topsoil extraction.,Open,ShortVegetation,,0.10
+250,Undifferentiated,UN,"Includes some agricultural features not included in tilled (i.e. orchards, vineyards, perennial crops and idle land > 10 years – out of agricultural production) as well as urban brown fields, hydro and transportation right-of- ways, upland thicket and openings within forests.",Open,Agriculture,,
