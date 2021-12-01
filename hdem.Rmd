@@ -26,7 +26,7 @@ __*<mark>PLEASE NOTE THAT THE FOLLOWING PAGE IS IN DRAFT</mark>*__
 
 
 # Map
-Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into 10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. The sub-watersheds are currently colour-coded as per their impervious coverage.
+Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into ~10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. In the sample below, sub-watersheds are colour-coded according to their degree of impervious cover.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map"}
 library(leaflet)
 library(rgdal)
@@ -57,15 +57,17 @@ The 3 million hectare ORMGP jurisdiction is subdivided to a number of 10km² sub
 - an overlay analysis is performed for each sub-watershed used to characterize:
  - Impervious area
  - canopy coverage
+ - waterbody coverage
+ - wetland coverage
  - relative permeability/infiltrability of surficial geology
  - mean slope and dominant aspect
  - mean depth to watertable.
 
 Below first describes the processing of a Provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is poritionned into 2,813 ~10km² sub-watersheds. 
 
-# Base data
 
-## Digital Elevation Model
+
+# Digital Elevation Model
 Ground surface elevations were collected from the 2006 version of the Provincial (Ministry of Natural Resources) Digital Elevation Model (DEM). This is a 10x10m² DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5m contours where the photogrammetic elevation points did not exist. A 50x50m² Digital Elevation Model (DEM) is produced by merging the tiles shown below:
 
 ```{r fig.asp=0.50, fig.align="center", fig.width=12, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="MNR 2006 Provincial DEM tiles shown in green."}
@@ -102,7 +104,7 @@ ggplot() +
 Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50m² cell. The resulting grid is a 5000x5000 50m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
 
 
-# Hydrological "correction" {#hyd.corr}
+## Hydrological "correction" {#hyd.corr}
 
 An automated topological topological analysis is performed on the DEM.
 
@@ -126,7 +128,7 @@ With the current version (2020), 10 flow corrections have been imposed and are s
 
 ## Subwatershed delineation
 
-todo
+__*todo*__
 
 
 
@@ -134,7 +136,7 @@ todo
 
 
 
-# Derivatives
+# Derivative products
 
 An overlay analysis is the process of overlaying 2 or more spatial layers and capturing statistics associated with their relative coverage. In this case, the sub-watershed layer is overlain by Provincial land-use and surficial geology layers to obtain information like percent impervious, relative permeability, etc.
 
@@ -149,9 +151,11 @@ The Ministry of Natural Resources and Forestry (2019) SOLRIS version 3.0 provinc
 
 The dominant SOLRIS land use class (by area) is assignes the Land use class index for every 50x50m² grid cell. 
 
-### Imperviousness and Canopy Cover
+![Final 50x50m SOLRIS mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50.png?raw=true)
 
-For any ~10km² sub-watershed and give a 50x50m² grid , there should be a set of roughly 4,000 SOLRIS land use class indices. Using a look-up system, the set of cells contained within a sub-watershed are assigned a value of imperviouseness and canopy coverage (according to their index) and acculmulated to a sub-watershed sum.
+### Land use coverage
+
+For any ~10km² sub-watershed and give a 50x50m² grid , there should be a set of roughly 4,000 SOLRIS land use class indices. Using a look-up system, the set of cells contained within a sub-watershed are assigned a value of imperviouseness, waterbody, wetland and canopy coverage (according to their SOLRIS index) and acculmulated to a sub-watershed sum.
 
 <br></br>
 <center>Percent impervious and canopy coverage as per SOLRIS v3.0 (MNRF, 2019) land use classification.
@@ -174,11 +178,17 @@ read.csv('shp/lookup_200731.csv') %>%
 ```
 </center>
 
+<br></br>
 
+![Final 50x50m impervious mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_perimp.png?raw=true)
+
+![Final 50x50m canopy mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_percov.png?raw=true)
 
 ## Surficial geology
 
 The Ontario Geological Survey's 2010 Surficial geology of southern Ontario layer also assignes a 50x50m² grid by the dominant class. 
+
+![Final 50x50m permeability mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/OGSsurfGeo_50.png?raw=true)
 
 ### Permeability
 
@@ -208,6 +218,8 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 <!-- ## Slope and Aspect -->
 <!-- 9-point planar regression -->
 
+# Source code
+Processing discussed above has been documented using a [jupyter notebook](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb). Source data can be found [here](https://www.dropbox.com/sh/rkdu5bwn1xhm7mh/AAA1bdaplpZAZIYl0DE1e39Oa?dl=0) and additional outputs can be found [here](https://github.com/OWRC/subwatershed/tree/main/jupyter/output).
 
 # References
 
