@@ -40,5 +40,10 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-
-/orig
+orig/
+input/
+test.py
+*.bil
+*.hdr
+*.prj
+*.csv
