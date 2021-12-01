@@ -221,6 +221,9 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 # Source code
 Processing discussed above has been documented using a [jupyter notebook](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb). Source data can be found [here](https://www.dropbox.com/sh/rkdu5bwn1xhm7mh/AAA1bdaplpZAZIYl0DE1e39Oa?dl=0) and additional outputs can be found [here](https://github.com/OWRC/subwatershed/tree/main/jupyter/output).
 
+## Final shapefile
+[owrc20-50a_SWS10-final.geojson (v.2020)](https://raw.githubusercontent.com/OWRC/subwatershed/main/shp/owrc20-50a_SWS10-final.geojson)
+
 # References
 
 
