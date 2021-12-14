@@ -6,7 +6,7 @@ knit: (function(input_file, encoding) {
   encoding=encoding,
   output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Oak Ridges Moraine Groundwater Program"
-date: "22/11/2021"
+date: "13/12/2021"
 output: 
   html_document:
     css: "./styles.css"
@@ -19,33 +19,32 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<br></br><br></br>
-__*<mark>PLEASE NOTE THAT THE FOLLOWING PAGE IS IN DRAFT</mark>*__
-<br></br><br></br>
-
+<!-- <br></br><br></br> -->
+<!-- __*<mark>PLEASE NOTE THAT THE FOLLOWING PAGE IS IN DRAFT</mark>*__ -->
+<!-- <br></br><br></br> -->
 
 
 # Map
-Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into ~10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. In the sample below, sub-watersheds are colour-coded according to their degree of impervious cover.
-```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map"}
-library(leaflet)
-library(rgdal)
-ormgp <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
-
-leaflet(ormgp) %>%
-  addProviderTiles( providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE) ) %>%
-  addPolygons(color = ~colorQuantile("YlGnBu", ormgp$perimp)(perimp),
-              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
-                              '<br>             area: ',round(Area/1000000,1),'km²',
-                              '<br>     permeability: ',perm,
-                              '<br> impervious cover: ',round(perimp*100,0),'%',
-                              '<br>     canopy cover: ',round(percov*100,0),'%',
-                              '<br> open water cover: ',round(perow*100,0),'%',
-                              '<br>    wetland cover: ',round(perwl*100,0),'%'
-                              )
-              )
-
-```
+Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into ~10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.
+# ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
+# library(leaflet)
+# library(rgdal)
+# ormgp <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
+# 
+# leaflet(ormgp) %>%
+#   addProviderTiles( providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE) ) %>%
+#   addPolygons(color = ~colorQuantile("YlGnBu", ormgp$perimp)(perimp),
+#               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+#                               '<br>             area: ',round(Area/1000000,1),'km²',
+#                               '<br>     permeability: ',perm,
+#                               '<br> impervious cover: ',round(perimp*100,0),'%',
+#                               '<br>     canopy cover: ',round(percov*100,0),'%',
+#                               '<br> open water cover: ',round(perow*100,0),'%',
+#                               '<br>    wetland cover: ',round(perwl*100,0),'%'
+#                               )
+#               )
+# 
+# ```
 
 
 # Introduction
@@ -54,21 +53,21 @@ The 3 million hectare ORMGP jurisdiction is subdivided to a number of 10km² sub
 
 - a catchment area delineation tool
 - an interpolated real-time daily meteorological dataset dating back to the year 1900
-- an overlay analysis is performed for each sub-watershed used to characterize:
- - Impervious area
- - canopy coverage
- - water body coverage
- - wetland coverage
- - relative permeability/infiltrability of surficial geology
- - mean slope and dominant aspect
- - mean depth to water table.
+- an overlay analysis performed to characterize sub-watershed:
+ + impervious area
+ + canopy coverage
+ + water body coverage
+ + wetland coverage
+ + relative permeability/infiltrability
+ + mean slope and dominant aspect
+ + mean depth to water table.
 
 Below first describes the processing of a Provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is portioned into 2,813 ~10km² sub-watersheds. 
 
-
+Next, the hydrologically-corrected digital elevation model (HDEM) is further process to derive a number of metrics aggregated at the sub-watershed scale.
 
 # Digital Elevation Model
-Ground surface elevations were collected from the 2006 version of the Provincial (Ministry of Natural Resources) Digital Elevation Model (DEM). This is a 10x10m² DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5m contours where the photogrammetic elevation points did not exist. A 50x50m² Digital Elevation Model (DEM) is produced by merging the tiles shown below:
+Ground surface elevations were collected from the 2006 version of the Provincial (Ministry of Natural Resources) Digital Elevation Model (DEM). This is a 10x10m² DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5m contours where the photogrammetic elevation points did not exist. An up-scaled 50x50m² Digital Elevation Model (DEM) is produced by merging the tiles shown below:
 
 ```{r fig.asp=0.50, fig.align="center", fig.width=12, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="MNR 2006 Provincial DEM tiles shown in green."}
 library(ggplot2)
@@ -98,7 +97,6 @@ ggplot() +
                        # plot.background=element_rect(fill="red")) +
     #labs(x='longitude',y='latitude', title="MNR 2006 Provincial DEM tiles shown in green.") +
     coord_sf(xlim=c(-81, -77), ylim=c(43, 45.75), expand=FALSE)
-
 ```
 
 Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50m² cell. The resulting grid is a 5000x5000 50m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
@@ -106,34 +104,75 @@ Elevation data were up-scaled by taking the average of known elevations occurrin
 
 ## Hydrological "correction" {#hyd.corr}
 
-An automated topological topological analysis is performed on the DEM.
+An automated topological topological analysis is performed on the DEM using the following methodologies:
 
-- automated Depression filling (Wang and Liu, 2006)
-- Flat region fix (Garbrecht and Martz, 1997)
-- Flowpaths D8 (O'Callaghan and Mark, 1984)
+1. Automated depression filling (Wang and Liu, 2006) was applied to the DEM. This filtering of elevation data ensures that every grid cell has at least 1 neighbouring cell with an assiged elevation at or below the current cell's elevation. This ensures that "drainage" is never impeded.
+2. While the above code works for most of the area, it will leave flat (zero-gradient) regions especially around lakes and wetlands. A fix by Garbrecht and Martz (1997) was added to ensure a consistent flow direction with negligeable change to the corrected DEM.
+3. Flowpaths are then computed based on the "D8" algorithm (O'Callaghan and Mark, 1984).
 
-__*todo*__
-
+Cell slopes and aspects are computed using a 9-point planar regression from the cell's elevation plus it's 8 neighbouring elevations.
 
 ## Manual adjustments
 
-While automated hydrological correction is quite powerful when applied to the Provincial DEM, there are in rare places where the algorithm fails to capture mapped flow paths (usually in flatter rural regions close to embanked roads). Fortunately, these errors can be easily corrected by imposing flow directions using flow vectors. For instance, flow paths can be "drawn-in" from polylines, where the vertex order specifies flow direction. 
+While automated hydrological correction is quite powerful when applied to the Provincial DEM, there are in rare places where the algorithm fails to capture mapped flow paths (usually in flatter rural regions close to embanked roads). Fortunately, these errors can be easily corrected by imposing flow directions using hand-drawn flow paths. Flow paths are save as polylines, where its vertices are ordered according to flow direction. 
 
-With the current version (2020), 10 flow corrections have been imposed and are saved in a set of shapefiles.  There is at the moment 1 new flow path correction in queue and will be imposed for the next release. *This is to say that this layer and its derivatives are continually being updated.*
+With the current version (v.2020), 10 flow corrections have been imposed and are saved in a set of shapefiles.  There is at the moment 1 new flow path correction in queue and will be imposed for the next release. *This is to say that this layer and its derivatives are continually being updated.*
 
 
 ## Validation
 
 <center>
 ![ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM)](fig/regional-hdem.png)
+The ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM, v.2020)
+</center> {#fig.hdem}
+
+\
+The benefit of computing the flow direction topology associated with the HDEM is that any user a could place a "virual particle" on the landscape and follow its drainage path as it traverses toward its terminous; in this case, the Great Lakes.
+
+More importantly however, given an HDEM, one can also efficiently compute the contributing area to any selected point on the landscape. (A live demonstration of this [is presented below](#cat.delin).) This feature provides the means to validate the procesessing presented in this document.
+
+Locations of 96 current and historical stream flow gauges are used to compare drainage areas reported to the drainage areas computed using the HDEM. Sources of the station locations were collected from the Water Survey of Canada and the Toronto Region Conservation Authority. The table below lists the stations used, followed by a figure comparing their match to the HDEM. As mentionned earlier, this layer will continually be updated with input from users and it is expected that this validation can only improve.
+
+
+<br></br>
+<center>List of streamflow gauging stations with reported contributing area.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(knitr)
+library(dplyr)
+library(kableExtra)
+library(rgdal)
+library(ggplot2)
+options(knitr.kable.NA = '')
+
+df <- read.csv('shp/t2-check.csv') 
+
+sputm <- SpatialPoints(cbind(df$E,df$N), proj4string=CRS("+proj=utm +zone=17 +datum=WGS84")) 
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+lnlt <- coordinates(spgeo) # https://stackoverflow.com/questions/30018098/how-to-convert-utm-coordinates-to-lat-and-long-in-r
+
+df %>%
+  mutate(DAdb=DAdb/1000/1000,DAcalc=DAcalc/1000/1000,Long=lnlt[,1],Lat=lnlt[,2]) %>%
+  select(2,6:9) %>%
+  relocate(LOC_NAME,Long,Lat,DAdb,DAcalc) %>%
+  mutate(diff=(DAcalc-DAdb)/DAdb*100) %>%
+  arrange(LOC_NAME) %>%
+  kbl(
+    col.names = c("Station ID", "Long", "Lat", "reported (km²)", "computed (km²)", "*difference* (%)"),
+    align = c("l","r","r","r","r","r"),
+    digits = 1
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  add_header_above(c(" " = 3, "Contributing Area" = 3), align = "c") %>%
+  kableExtra::scroll_box(width = "90%", height = "300px")
+
+
+df %>% ggplot(aes(DAdb/1000/1000,DAcalc/1000/1000)) +
+  geom_point() +
+  geom_abline(linetype="dotted") +
+  labs(title="\n\nGraphical comparison",x="reported contributing area (km²)",y="computed contributing area (km²)") +
+  coord_fixed()
+```
 </center>
-
-## Sub-watershed delineation
-
-__*todo*__
-
-
-
 
 
 
@@ -153,7 +192,11 @@ The Ministry of Natural Resources and Forestry (2019) SOLRIS version 3.0 provinc
 
 The dominant SOLRIS land use class (by area) is assigned the Land use class index for every 50x50m² grid cell. 
 
-![Final 50x50m SOLRIS mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50.png?raw=true)
+<center>
+![Final 50x50m SOLRIS mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50.png?raw=true)
+Final 50x50m SOLRIS mapping. *(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
+</center>
+\
 
 ### Land use coverage
 
@@ -170,11 +213,11 @@ read.csv('shp/lookup_200731.csv') %>%
   select(1:2,7:8) %>%
   mutate(PerImp=PerImp*100,PerCov=PerCov*100) %>%
   kbl(
-    col.names = c("*Index*", "*Name*", "*Imperviousness (%)*", "*Canopy cover (%)*"),
+    col.names = c("Index", "Name", "Imperviousness (%)", "Canopy cover (%)"),
     align = c("r","l","c","c"),
     digits = 0
   ) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
   add_header_above(c("SOLRIS Land use classification" = 2, " " = 2), align = "l") %>%
   kableExtra::scroll_box(width = "90%", height = "300px")
 ```
@@ -182,15 +225,27 @@ read.csv('shp/lookup_200731.csv') %>%
 
 <br></br>
 
-![Final 50x50m impervious mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_perimp.png?raw=true)
+<center>
+![Final 50x50m impervious mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_perimp.png?raw=true)
+*(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
+</center>
 
-![Final 50x50m canopy mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_percov.png?raw=true)
+\
+<center>
+![Final 50x50m canopy mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_percov.png?raw=true)
+Final 50x50m canopy mapping. *(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
+</center>
+\
 
 ## Surficial geology
 
 The Ontario Geological Survey's 2010 Surficial geology of southern Ontario layer also assigns a 50x50m² grid by the dominant class. 
 
-![Final 50x50m permeability mapping](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/OGSsurfGeo_50.png?raw=true)
+<center>
+![Final 50x50m permeability mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/OGSsurfGeo_50.png?raw=true)
+Final 50x50m permeability mapping. *(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
+</center>
+\
 
 ### Permeability
 
@@ -207,7 +262,7 @@ par <- c("Low","Low-medium","Medium","Medium-high","high","unknown/variable","fl
 val <- format(c(1e-9,1e-8,1e-7,1e-6,1e-5,1e-8,1e-5,1e-6),digits=3)
 data.frame(par,val) %>%
   kbl(
-    col.names = c(" ", "*K (m/s)*"),
+    col.names = c(" ", "K (m/s)"),
     align = c("l","r")
   ) %>%
   kable_styling(full_width = F, bootstrap_options = c("striped", "hover", "condensed"))
@@ -216,9 +271,13 @@ data.frame(par,val) %>%
 
 The resulting effective hydraulic conductivity is then reverted back to the nearest Low--High OGS (2010) classification.
 
+## Contributing area delineation {#cat.delin}
 
-<!-- ## Slope and Aspect -->
-<!-- 9-point planar regression -->
+One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the drainage topology computed in the area. Now, users have the ability to have returned a delineated catchment area polygon for any given point that lies within the HDEM extent. Try below:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area."}
+knitr::include_app("https://yihui.shinyapps.io/miniUI/", height = "600px")
+```
 
 # Source code
 Processing discussed above has been documented using a [jupyter notebook](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb). Source data can be found [here](https://www.dropbox.com/sh/rkdu5bwn1xhm7mh/AAA1bdaplpZAZIYl0DE1e39Oa?dl=0) and additional outputs can be found [here](https://github.com/OWRC/subwatershed/tree/main/jupyter/output).
@@ -238,3 +297,4 @@ Ontario Geological Survey 2010. Surficial geology of southern Ontario; Ontario G
 Ministry of Natural Resources and Forestry, 2019. Southern Ontario Land Resource Information System (SOLRIS) Version 3.0: Data Specifications. Science and Research Branch, April 2019
 
 Wang, L., H. Liu, 2006. An efficient method for identifying and filling surface depressions in digital elevation models for hydrologic analysis and modelling. International Journal of Geographical Information Science 20(2): 193-213.
+
