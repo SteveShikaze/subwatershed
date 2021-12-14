@@ -28,7 +28,7 @@ shinyApp(
       lng <- round(event$lng, 3)
       
       showNotification(paste0("querying to ",lat, ', ', lng))
-      qstr <- paste0("http://golang.oakridgeswater.ca:8080/carea/",event$lat,"/",event$lng)
+      qstr <- paste0("https://golang.oakridgeswater.ca/carea/",event$lat,"/",event$lng)
       geojson <- readLines(qstr) %>% paste(collapse = "\n")
       gg <- fromJSON(geojson)
       isolate(leafletProxy("map") %>%
