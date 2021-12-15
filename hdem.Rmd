@@ -26,25 +26,63 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Map
 Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into ~10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.
-# ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
-# library(leaflet)
-# library(rgdal)
-# ormgp <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
-# 
-# leaflet(ormgp) %>%
-#   addProviderTiles( providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE) ) %>%
-#   addPolygons(color = ~colorQuantile("YlGnBu", ormgp$perimp)(perimp),
-#               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
-#                               '<br>             area: ',round(Area/1000000,1),'km²',
-#                               '<br>     permeability: ',perm,
-#                               '<br> impervious cover: ',round(perimp*100,0),'%',
-#                               '<br>     canopy cover: ',round(percov*100,0),'%',
-#                               '<br> open water cover: ',round(perow*100,0),'%',
-#                               '<br>    wetland cover: ',round(perwl*100,0),'%'
-#                               )
-#               )
-# 
-# ```
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
+library(leaflet)
+library(rgdal)
+ormgp <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
+
+leaflet(ormgp) %>%
+  addProviderTiles( providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE) ) %>%
+  addPolygons(color = ~colorQuantile("YlGnBu", ormgp$perimp)(perimp),
+              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+                              '<br>             area: ',round(Area/1000000,1),'km²',
+                              '<br>     permeability: ',perm,
+                              '<br> impervious cover: ',round(perimp*100,0),'%',
+                              '<br>     canopy cover: ',round(percov*100,0),'%',
+                              '<br> open water cover: ',round(perow*100,0),'%',
+                              '<br>    wetland cover: ',round(perwl*100,0),'%'
+                              ),
+              group = "Imperviousness"
+              ) %>%
+  addPolygons(color = ~colorQuantile("YlGn", ormgp$percov)(percov),
+              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+                              '<br>             area: ',round(Area/1000000,1),'km²',
+                              '<br>     permeability: ',perm,
+                              '<br> impervious cover: ',round(perimp*100,0),'%',
+                              '<br>     canopy cover: ',round(percov*100,0),'%',
+                              '<br> open water cover: ',round(perow*100,0),'%',
+                              '<br>    wetland cover: ',round(perwl*100,0),'%'
+                              ),
+              group = "Canopy coverage"
+              ) %>%
+  addPolygons(color = ~colorQuantile("Blues", ormgp$perow)(perow),
+              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+                              '<br>             area: ',round(Area/1000000,1),'km²',
+                              '<br>     permeability: ',perm,
+                              '<br> impervious cover: ',round(perimp*100,0),'%',
+                              '<br>     canopy cover: ',round(percov*100,0),'%',
+                              '<br> open water cover: ',round(perow*100,0),'%',
+                              '<br>    wetland cover: ',round(perwl*100,0),'%'
+                              ),
+              group = "Open water coverage"
+              ) %>%
+  addPolygons(color = ~colorQuantile("GnBu", ormgp$perwl)(perwl),
+              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+                              '<br>             area: ',round(Area/1000000,1),'km²',
+                              '<br>     permeability: ',perm,
+                              '<br> impervious cover: ',round(perimp*100,0),'%',
+                              '<br>     canopy cover: ',round(percov*100,0),'%',
+                              '<br> open water cover: ',round(perow*100,0),'%',
+                              '<br>    wetland cover: ',round(perwl*100,0),'%'
+                              ),
+              group = "Wetland coverage"
+              ) %>%
+  addLayersControl(
+    baseGroups = c("Imperviousness", "Canopy coverage","Wetland coverage","Open water coverage"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+    
+```
 
 
 # Introduction
@@ -106,9 +144,9 @@ Elevation data were up-scaled by taking the average of known elevations occurrin
 
 An automated topological topological analysis is performed on the DEM using the following methodologies:
 
-1. Automated depression filling (Wang and Liu, 2006) was applied to the DEM. This filtering of elevation data ensures that every grid cell has at least 1 neighbouring cell with an assiged elevation at or below the current cell's elevation. This ensures that "drainage" is never impeded.
-2. While the above code works for most of the area, it will leave flat (zero-gradient) regions especially around lakes and wetlands. A fix by Garbrecht and Martz (1997) was added to ensure a consistent flow direction with negligeable change to the corrected DEM.
-3. Flowpaths are then computed based on the "D8" algorithm (O'Callaghan and Mark, 1984).
+1. Automated depression filling (Wang and Liu, 2006) was applied to the DEM. This filtering of elevation data ensures that every grid cell has at least 1 neighbouring cell with an assigned elevation at or below the current cell's elevation. This ensures that "drainage" is never impeded.
+2. While the above code works for most of the area, it will leave flat (zero-gradient) regions especially around lakes and wetlands. A fix by Garbrecht and Martz (1997) was added to ensure a consistent flow direction with negligible change to the corrected DEM.
+3. Flow paths are then computed based on the "D8" algorithm (O'Callaghan and Mark, 1984).
 
 Cell slopes and aspects are computed using a 9-point planar regression from the cell's elevation plus it's 8 neighbouring elevations.
 
@@ -127,11 +165,11 @@ The ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HD
 </center> {#fig.hdem}
 
 \
-The benefit of computing the flow direction topology associated with the HDEM is that any user a could place a "virual particle" on the landscape and follow its drainage path as it traverses toward its terminous; in this case, the Great Lakes.
+The benefit of computing the flow direction topology associated with the HDEM is that any user a could place a "virtual particle" on the landscape and follow its drainage path as it traverses toward its terminus; in this case, the Great Lakes.
 
-More importantly however, given an HDEM, one can also efficiently compute the contributing area to any selected point on the landscape. (A live demonstration of this [is presented below](#cat.delin).) This feature provides the means to validate the procesessing presented in this document.
+More importantly however, given an HDEM, one can also efficiently compute the contributing area to any selected point on the landscape. (A live demonstration of this [is presented below](#cat.delin).) This feature provides the means to validate the processing presented in this document.
 
-Locations of 96 current and historical stream flow gauges are used to compare drainage areas reported to the drainage areas computed using the HDEM. Sources of the station locations were collected from the Water Survey of Canada and the Toronto Region Conservation Authority. The table below lists the stations used, followed by a figure comparing their match to the HDEM. As mentionned earlier, this layer will continually be updated with input from users and it is expected that this validation can only improve.
+Locations of 96 current and historical stream flow gauges are used to compare drainage areas reported to the drainage areas computed using the HDEM. Sources of the station locations were collected from the Water Survey of Canada and the Toronto Region Conservation Authority. The table below lists the stations used, followed by a figure comparing their match to the HDEM. As mentioned earlier, this layer will continually be updated with input from users and it is expected that this validation can only improve.
 
 
 <br></br>
@@ -275,7 +313,7 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 
 One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the drainage topology computed in the area. Now, users have the ability to have returned a delineated catchment area polygon for any given point that lies within the HDEM extent. Try below:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area."}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area. *Hint: best to click along a watercourse*"}
 knitr::include_app("https://owrc.shinyapps.io/CAdemo/", height = "600px")
 ```
 
