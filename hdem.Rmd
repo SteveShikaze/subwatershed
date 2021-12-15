@@ -276,7 +276,7 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the drainage topology computed in the area. Now, users have the ability to have returned a delineated catchment area polygon for any given point that lies within the HDEM extent. Try below:
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area."}
-knitr::include_app("https://yihui.shinyapps.io/miniUI/", height = "600px")
+knitr::include_app("https://owrc.shinyapps.io/CAdemo/", height = "600px")
 ```
 
 # Source code
