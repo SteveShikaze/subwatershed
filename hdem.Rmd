@@ -29,11 +29,12 @@ Presented up front is the __*final*__ product for which the rest of this documen
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
 library(leaflet)
 library(rgdal)
-ormgp <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
 
-leaflet(ormgp) %>%
+geojson <- readOGR("shp/owrc20-50a_SWS10-final.geojson",verbose = FALSE)
+geojson$iperc <- as.numeric(factor(geojson$perm))
+leaflet(geojson) %>%
   addProviderTiles( providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE) ) %>%
-  addPolygons(color = ~colorQuantile("YlGnBu", ormgp$perimp)(perimp),
+  addPolygons(color = ~colorQuantile("YlGnBu", geojson$perimp)(perimp),
               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
                               '<br>             area: ',round(Area/1000000,1),'km²',
                               '<br>     permeability: ',perm,
@@ -44,7 +45,7 @@ leaflet(ormgp) %>%
                               ),
               group = "Imperviousness"
               ) %>%
-  addPolygons(color = ~colorQuantile("YlGn", ormgp$percov)(percov),
+  addPolygons(color = ~colorQuantile("YlGn", geojson$percov)(percov),
               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
                               '<br>             area: ',round(Area/1000000,1),'km²',
                               '<br>     permeability: ',perm,
@@ -55,7 +56,7 @@ leaflet(ormgp) %>%
                               ),
               group = "Canopy coverage"
               ) %>%
-  addPolygons(color = ~colorQuantile("Blues", ormgp$perow)(perow),
+  addPolygons(color = ~colorQuantile("Blues", geojson$perow)(perow),
               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
                               '<br>             area: ',round(Area/1000000,1),'km²',
                               '<br>     permeability: ',perm,
@@ -66,7 +67,7 @@ leaflet(ormgp) %>%
                               ),
               group = "Open water coverage"
               ) %>%
-  addPolygons(color = ~colorQuantile("GnBu", ormgp$perwl)(perwl),
+  addPolygons(color = ~colorQuantile("GnBu", geojson$perwl)(perwl),
               popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
                               '<br>             area: ',round(Area/1000000,1),'km²',
                               '<br>     permeability: ',perm,
@@ -77,8 +78,19 @@ leaflet(ormgp) %>%
                               ),
               group = "Wetland coverage"
               ) %>%
+  addPolygons(color = ~colorFactor("Dark2", geojson$iperc)(iperc),
+              popup = ~paste0('<b>sub-watershed: ',mmID,'</b>',
+                              '<br>             area: ',round(Area/1000000,1),'km²',
+                              '<br>     permeability: ',perm,
+                              '<br> impervious cover: ',round(perimp*100,0),'%',
+                              '<br>     canopy cover: ',round(percov*100,0),'%',
+                              '<br> open water cover: ',round(perow*100,0),'%',
+                              '<br>    wetland cover: ',round(perwl*100,0),'%'
+                              ),
+              group = "Permeability"              
+              ) %>%
   addLayersControl(
-    baseGroups = c("Imperviousness", "Canopy coverage","Wetland coverage","Open water coverage"),
+    baseGroups = c("Imperviousness", "Canopy coverage","Wetland coverage","Open water coverage","Permeability"),
     options = layersControlOptions(collapsed = FALSE)
   )
     
@@ -157,12 +169,12 @@ While automated hydrological correction is quite powerful when applied to the Pr
 With the current version (v.2020), 10 flow corrections have been imposed and are saved in a set of shapefiles.  There is at the moment 1 new flow path correction in queue and will be imposed for the next release. *This is to say that this layer and its derivatives are continually being updated.*
 
 
-## Validation
+## Validation {#fig.hdem}
 
 <center>
 ![ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM)](fig/regional-hdem.png)
 The ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM, v.2020)
-</center> {#fig.hdem}
+</center> 
 
 \
 The benefit of computing the flow direction topology associated with the HDEM is that any user a could place a "virtual particle" on the landscape and follow its drainage path as it traverses toward its terminus; in this case, the Great Lakes.
