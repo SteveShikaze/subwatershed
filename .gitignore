@@ -42,6 +42,7 @@ vignettes/*.pdf
 
 orig/
 input/
+app/
 test.py
 *.bil
 *.hdr
