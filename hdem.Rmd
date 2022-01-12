@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Map
-Presented up front is the __*final*__ product for which the rest of this document describes. It is a map of the ORMGP jurisdiction discretized into ~10km² sub-watersheds. *Clicking* at any sub-watershed will return a number of properties. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.
+Presented up front is the __*final*__ mapping product on which the rest of the document is based.The map shows the ORMGP jurisdiction discretized into sub-watersheds each approximately ~10km² in area. Using the mouse to click on any sub-watershed will return a number of properties of the selected sub-watershed. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
 library(leaflet)
 library(rgdal)
@@ -99,7 +99,7 @@ leaflet(geojson) %>%
 
 # Introduction
 
-The 3 million hectare ORMGP jurisdiction is subdivided to a number of 10km² sub-watersheds as a basis for hydrometeorological data analysis. Every sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent here is to deem these sub-watersheds a "logical unit" for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
+The three-million hectare ORMGP jurisdiction has been subdivided into sub-watersheds (approximately 10 km2 in area) as a basis for hydrometeorological data analysis. Every sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is to deem these sub-watersheds a "logical unit" for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
 
 - a catchment area delineation tool
 - an interpolated real-time daily meteorological dataset dating back to the year 1900
@@ -108,16 +108,16 @@ The 3 million hectare ORMGP jurisdiction is subdivided to a number of 10km² sub
  + canopy coverage
  + water body coverage
  + wetland coverage
- + relative permeability/infiltrability
+ + permeability
  + mean slope and dominant aspect
  + mean depth to water table.
 
-Below first describes the processing of a Provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is portioned into 2,813 ~10km² sub-watersheds. 
+Below first describes the processing of a provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is portioned into 2,813 ~10km² sub-watersheds. 
 
-Next, the hydrologically-corrected digital elevation model (HDEM) is further process to derive a number of metrics aggregated at the sub-watershed scale.
+Next, the hydrologically-corrected digital elevation model (HDEM) is further processed to derive a number of metrics aggregated at the sub-watershed scale.
 
 # Digital Elevation Model
-Ground surface elevations were collected from the 2006 version of the Provincial (Ministry of Natural Resources) Digital Elevation Model (DEM). This is a 10x10m² DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5m contours where the photogrammetic elevation points did not exist. An up-scaled 50x50m² Digital Elevation Model (DEM) is produced by merging the tiles shown below:
+Ground surface elevations were collected from the 2006 version of the provincial (Ministry of Natural Resources) DEM. This is a 10x10 m DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5 m contours where the photogrammetic elevation points did not exist. An up-scaled 50x50 m Digital Elevation Model (DEM) is produced by merging the tiles shown below:
 
 ```{r fig.asp=0.50, fig.align="center", fig.width=12, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="MNR 2006 Provincial DEM tiles shown in green."}
 library(ggplot2)
@@ -149,12 +149,12 @@ ggplot() +
     coord_sf(xlim=c(-81, -77), ylim=c(43, 45.75), expand=FALSE)
 ```
 
-Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50m² cell. The resulting grid is a 5000x5000 50m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
+Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50 m cell. The resulting grid is a 5000x5000 50 m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
 
 
-## Hydrological "correction" {#hyd.corr}
+## Hydrological correction {#hyd.corr}
 
-An automated topological topological analysis is performed on the DEM using the following methodologies:
+An automated topological analysis was performed on the DEM using the following methodologies:
 
 1. Automated depression filling (Wang and Liu, 2006) was applied to the DEM. This filtering of elevation data ensures that every grid cell has at least 1 neighbouring cell with an assigned elevation at or below the current cell's elevation. This ensures that "drainage" is never impeded.
 2. While the above code works for most of the area, it will leave flat (zero-gradient) regions especially around lakes and wetlands. A fix by Garbrecht and Martz (1997) was added to ensure a consistent flow direction with negligible change to the corrected DEM.
