@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Map
-Presented up front is the __*final*__ mapping product on which the rest of the document is based.The map shows the ORMGP jurisdiction discretized into sub-watersheds each approximately ~10km² in area. Using the mouse to click on any sub-watershed will return a number of properties of the selected sub-watershed. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.
+Presented up front is the __*final*__ mapping product on which the rest of the document is based.The map shows the ORMGP jurisdiction discretized into sub-watersheds each approximately ~10km² in area. Using the mouse to click on any sub-watershed will return a number of properties of the selected sub-watershed. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.  The menu in the top-right corner provides options for canopy coverage, weltland coverage, open water coverage and permeability.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
 library(leaflet)
 library(rgdal)
@@ -99,7 +99,7 @@ leaflet(geojson) %>%
 
 # Introduction
 
-The three-million hectare ORMGP jurisdiction has been subdivided into sub-watersheds (approximately 10 km2 in area) as a basis for hydrometeorological data analysis. Every sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is to deem these sub-watersheds a "logical unit" for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
+The ORMGP jurisdiction, which is over three-million hectares, has been subdivided into sub-watersheds (approximately 10 km² in area) to provide a basis for hydrometeorological data analysis. Each sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is to deem these sub-watersheds suitable for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
 
 - a catchment area delineation tool
 - an interpolated real-time daily meteorological dataset dating back to the year 1900
