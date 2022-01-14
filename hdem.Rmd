@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Map
-Presented up front is the __*final*__ mapping product on which the rest of the document is based.The map shows the ORMGP jurisdiction discretized into sub-watersheds each approximately ~10km² in area. Using the mouse to click on any sub-watershed will return a number of properties of the selected sub-watershed. In the figure below, sub-watersheds are colour-coded according to their degree of impervious cover.  The menu in the top-right corner provides options for canopy coverage, weltland coverage, open water coverage and permeability.
+Presented up front is the __*final*__ mapping product on which the rest of this document is based.The map shows the ORMGP jurisdiction discretized into sub-watersheds each approximately ~10km² in area. Using the mouse to click on any sub-watershed will return a number of properties of the selected sub-watershed. In the interactive map below, sub-watersheds are colour-coded according to their percentage of impervious cover.  The menu in the top-right corner provides similar options for canopy coverage, weltland coverage, open water coverage and permeability.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 10km² sub-watershed map. Click a subwatershed to view spatial properties."}
 library(leaflet)
 library(rgdal)
@@ -99,7 +99,7 @@ leaflet(geojson) %>%
 
 # Introduction
 
-The ORMGP jurisdiction, which is over three-million hectares, has been subdivided into sub-watersheds (approximately 10 km² in area) to provide a basis for hydrometeorological data analysis. Each sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is to deem these sub-watersheds suitable for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
+The ORMGP jurisdiction, which covers over three-million hectares, has been subdivided into sub-watersheds, each of which is approximately 10 km² in area. These sub-watersheds provide a basis for hydrometeorological data analysis. Each sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is that these sub-watersheds are suitable for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
 
 - a catchment area delineation tool
 - an interpolated real-time daily meteorological dataset dating back to the year 1900
@@ -112,12 +112,10 @@ The ORMGP jurisdiction, which is over three-million hectares, has been subdivide
  + mean slope and dominant aspect
  + mean depth to water table.
 
-Below first describes the processing of a provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is portioned into 2,813 ~10km² sub-watersheds. 
+The development of this interactive map includes the processing of a provincial Digital Elevation Model (DEM) yielding a "hydrologically-correct" model of the ORMGP ground surface. From this information, the ORMGP region is portioned into 2,813 ~10km² sub-watersheds. Next, the hydrologically-corrected digital elevation model (HDEM) is further processed to derive a number of metrics aggregated at the sub-watershed scale. These steps are described below.
 
-Next, the hydrologically-corrected digital elevation model (HDEM) is further processed to derive a number of metrics aggregated at the sub-watershed scale.
-
-# Digital Elevation Model
-Ground surface elevations were collected from the 2006 version of the provincial (Ministry of Natural Resources) DEM. This is a 10x10 m DEM derived from 1:10,000 scale OBM base mapping based on photogrammetic elevation points and 5 m contours where the photogrammetic elevation points did not exist. An up-scaled 50x50 m Digital Elevation Model (DEM) is produced by merging the tiles shown below:
+# Digital Elevation Model (DEM)
+Ground surface elevations were collected from the 2006 version of the provincial (Ministry of Natural Resources) DEM. This is a DEM with 10 m x 10 m cells and is derived from 1:10,000 scale Ontario Base Map (OBM) mapping based on photogrammetic elevation points and 5 m contours where the photogrammetic elevation points did not exist. An up-scaled  Digital Elevation Model (DEM) with 50 m by 50 m cells was produced by merging the tiles shown below:
 
 ```{r fig.asp=0.50, fig.align="center", fig.width=12, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="MNR 2006 Provincial DEM tiles shown in green."}
 library(ggplot2)
@@ -149,10 +147,9 @@ ggplot() +
     coord_sf(xlim=c(-81, -77), ylim=c(43, 45.75), expand=FALSE)
 ```
 
-Elevation data were up-scaled by taking the average of known elevations occurring within every 50x50 m cell. The resulting grid is a 5000x5000 50 m-uniform cell grid, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
+Elevation data were up-scaled by taking the average of known elevations occurring within each 50 m by 50 m cell. The resulting grid includes 5000 by 5000 uniform cells, with an upper-left-corner origin at (E: 545,000, N: 5,035,000) NAD83 UTM zone 17.
 
-
-## Hydrological correction {#hyd.corr}
+## Hydrological Correction {#hyd.corr}
 
 An automated topological analysis was performed on the DEM using the following methodologies:
 
@@ -164,24 +161,24 @@ Cell slopes and aspects are computed using a 9-point planar regression from the 
 
 ## Manual adjustments
 
-While automated hydrological correction is quite powerful when applied to the Provincial DEM, there are in rare places where the algorithm fails to capture mapped flow paths (usually in flatter rural regions close to embanked roads). Fortunately, these errors can be easily corrected by imposing flow directions using hand-drawn flow paths. Flow paths are save as polylines, where its vertices are ordered according to flow direction. 
+While the automated hydrological corrections described above are powerful when applied to the Provincial DEM, there are in rare places where the algorithm fails to capture mapped flow paths (usually in flatter rural regions close to embanked roads). Fortunately, these errors can be easily corrected by imposing flow directions using hand-drawn flow paths,which are saved as polylines, which have vertices ordered according to flow direction. 
 
-With the current version (v.2020), 10 flow corrections have been imposed and are saved in a set of shapefiles.  There is at the moment 1 new flow path correction in queue and will be imposed for the next release. *This is to say that this layer and its derivatives are continually being updated.*
+With the current version (v.2020), 10 flow corrections have been imposed and are saved in a set of shapefiles.  There is currently one new flow path correction in queue and will be imposed for the next release. *This is to say that this layer and its derivatives are continually being updated.*
 
 
 ## Validation {#fig.hdem}
 
 <center>
 ![ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM)](fig/regional-hdem.png)
-The ORMGP regional 50x50m² Hydrologically corrected Digital Elevation Model (HDEM, v.2020)
+Hydrologically corrected Digital Elevation Model for the ORMGP area, based on 50 m by 50 m cells (HDEM, v.2020)
 </center> 
 
 \
-The benefit of computing the flow direction topology associated with the HDEM is that any user a could place a "virtual particle" on the landscape and follow its drainage path as it traverses toward its terminus; in this case, the Great Lakes.
+The benefit of computing the flow direction topology associated with the HDEM is that a user could place a virtual water particle on the landscape and follow its drainage path as it traverses toward its terminus; in this case, the Great Lakes.
 
-More importantly however, given an HDEM, one can also efficiently compute the contributing area to any selected point on the landscape. (A live demonstration of this [is presented below](#cat.delin).) This feature provides the means to validate the processing presented in this document.
+More importantly, with this HDEM, a user can also estimate the contributing area to any selected point on the landscape. (A live demonstration of this [is presented below](#cat.delin).) This feature provides the means to validate the process in this document.
 
-Locations of 96 current and historical stream flow gauges are used to compare drainage areas reported to the drainage areas computed using the HDEM. Sources of the station locations were collected from the Water Survey of Canada and the Toronto Region Conservation Authority. The table below lists the stations used, followed by a figure comparing their match to the HDEM. As mentioned earlier, this layer will continually be updated with input from users and it is expected that this validation can only improve.
+Locations of 96 current and historical stream flow gauges are used to compare drainage areas reported to the drainage areas computed using the HDEM. Sources of the station locations were collected from the Water Survey of Canada (WSC) and the Toronto Region Conservation Authority (TRCA). The table below lists the stations used in this validation process, and is followed by a figure that shows a comparison of their match to the HDEM. As mentioned earlier, this layer will be routinely updated with input from users.
 
 
 <br></br>
@@ -229,28 +226,28 @@ df %>% ggplot(aes(DAdb/1000/1000,DAcalc/1000/1000)) +
 
 # Derivative products
 
-An overlay analysis is the process of overlaying 2 or more spatial layers and capturing statistics associated with their relative coverage. In this case, the sub-watershed layer is overlain by Provincial land-use and surficial geology layers to obtain information like percent impervious, relative permeability, etc.
+An overlay analysis is the process of overlaying to or more spatial layers and capturing statistics associated with their relative coverage. In this case, the sub-watershed layer is overlain by Provincial land-use and surficial geology layers to obtain information like percent impervious, relative permeability, etc.
 
-Provincial layers discussed in more detail below have in all cases been re-sampled to the 50x50m² grid associated with the [hydrologically corrected DEM](#hyd.corr). It is from these rasters where the aggregation of watershed characteristics is computed.
+The Provincial layers are discussed in more detail below and have all been re-sampled to the grid associated with the [hydrologically corrected DEM](#hyd.corr), with 50 m by 50 m cell sizes. It is from these rasters where the aggregation of watershed characteristics is computed.
 
 ## Land use
 
-The Ministry of Natural Resources and Forestry (2019) SOLRIS version 3.0 provincial land use layer is employed to aggregate imperviousness and canopy coverage at the sub-watershed scale. In areas to the north, where the SOLRIS coverage discontinues, interpretation was applied by: 
+The Ministry of Natural Resources and Forestry (2019) SOLRIS version 3.0 provincial land-use layer is used to aggregate imperviousness and canopy coverage at the sub-watershed scale. In areas to the north, where the SOLRIS coverage discontinues, interpretation was applied by: 
 
-1. Using Provincial mapping of roads, wetlands and water bodies, areas outside of the SOLRIS data bounds *(typically up on the Canadian Shield)* are filled in with the appropriate SOLRIS land use class index (201, 150, 170, respectively--MNRF, 2019); and,
+1. Using Provincial mapping of roads, wetlands and water bodies, areas outside of the SOLRIS data bounds *(typically up on the Canadian Shield)* are filled in with the appropriate SOLRIS land-use class index (201, 150, 170, respectively--MNRF, 2019); and,
 2. All remaining area not covered by SOLRIS is assumed Forest (SOLRIS land use class index of 90), as observed with satellite imagery.
 
-The dominant SOLRIS land use class (by area) is assigned the Land use class index for every 50x50m² grid cell. 
+The dominant SOLRIS land use class (by area) is assigned the Land use class index for every 50 m x 50 m grid cell. 
 
 <center>
-![Final 50x50m SOLRIS mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50.png?raw=true)
+![Final 50 m by 50 m SOLRIS mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50.png?raw=true)
 Final 50x50m SOLRIS mapping. *(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
 </center>
 \
 
 ### Land use coverage
 
-For any ~10km² sub-watershed and give a 50x50m² grid , there should be a set of roughly 4,000 SOLRIS land use class indices. Using a look-up system, the set of cells contained within a sub-watershed are assigned a value of imperviousness, water body, wetland and canopy coverage (according to their SOLRIS index) and accumulated to a sub-watershed sum.
+For each ~10km² sub-watershed and given a grid with 50 m by 50 m cell sizes, there should be a set of approximately 4,000 SOLRIS land-use class indices. Using a look-up system, the set of cells contained within a sub-watershed is assigned a value of imperviousness, water body, wetland and canopy coverage (according to their SOLRIS index) and accumulated to a sub-watershed sum.
 
 <br></br>
 <center>Percent impervious and canopy coverage as per SOLRIS v3.0 (MNRF, 2019) land use classification.
@@ -282,14 +279,14 @@ read.csv('shp/lookup_200731.csv') %>%
 
 \
 <center>
-![Final 50x50m canopy mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_percov.png?raw=true)
+![Final canopy mapping using 50 m by 50 m cell sizes.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/solrisv3_10_infilled_50_percov.png?raw=true)
 Final 50x50m canopy mapping. *(For illustrative purposes only [see here](https://github.com/OWRC/subwatershed/blob/main/jupyter/OWRC-SWS.ipynb) to reproduce shown raster.)*
 </center>
 \
 
 ## Surficial geology
 
-The Ontario Geological Survey's 2010 Surficial geology of southern Ontario layer also assigns a 50x50m² grid by the dominant class. 
+The Ontario Geological Survey's 2010 Surficial Geology of southern Ontario layer (OGS, 2010) also assigns a grid with 50 m by 50 m cell sizes by the dominant class. 
 
 <center>
 ![Final 50x50m permeability mapping.](https://github.com/OWRC/subwatershed/blob/main/jupyter/output/OGSsurfGeo_50.png?raw=true)
@@ -338,7 +335,7 @@ Processing discussed above has been documented using a [jupyter notebook](https:
 # References
 
 
-Garbrecht Martz 1997 The assignment of drainage direction over flat surfaces in raster digital elevation models
+Garbrecht, J., and L.W. Martz 1997. The assignment of drainage direction over flat surfaces in raster digital elevation models, Journal of Hydrology, 193, 204-213
 
 O'Callaghan, J.F., and D.M. Mark, 1984. The extraction of drainage net-works from digital elevation data, Comput. Vision Graphics Image Process., 28, pp. 328-344
 
