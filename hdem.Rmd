@@ -296,9 +296,9 @@ Final 50x50m permeability mapping. *(For illustrative purposes only [see here](h
 
 ### Permeability
 
-The OGS classes have been grouped according to the attribute "permeability" using a similar look-up table cross-referencing scheme. OGS (2010) adds: *"Permeability classification is a very generalized one, based purely on characteristics of material types."* 
+The OGS classes have been grouped according to the attribute permeability using a similar look-up table cross-referencing scheme. OGS (2010) adds: *"Permeability classification is a very generalized one, based purely on characteristics of material types."* 
 
-After assigning an assumed "effective" hydraulic conductivity to every permeability group, sub-watershed "permeability" is then calculated as the geometric mean of 50x50m² grid cells contained within a sub-watershed. Effective hydraulic conductivity value assumed for every permeability group is shown here:
+After assigning an assumed effective hydraulic conductivity (K) to every permeability group, sub-watershed permeability is then calculated as the geometric mean of 50 m x 50 m grid cells contained within a sub-watershed. The Effective hydraulic conductivity value assumed for every group is shown here:
 
 <br></br>
 <center>Permeability classifications (after OGS, 2010) and assumed effective hydraulic conductivities.
@@ -320,7 +320,7 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 
 ## Contributing area delineation {#cat.delin}
 
-One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the drainage topology computed in the area. Now, users have the ability to have returned a delineated catchment area polygon for any given point that lies within the HDEM extent. Try below:
+One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the computed drainage topology. Users have the ability to delineate catchment area polygon for any given point that lies within the HDEM extent. Try below:
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area. *Hint: best to click along a watercourse*"}
 knitr::include_app("https://owrc.shinyapps.io/CAdemo/", height = "600px")
