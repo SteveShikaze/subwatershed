@@ -99,7 +99,7 @@ leaflet(geojson) %>%
 
 # Introduction
 
-The ORMGP jurisdiction, which covers over three-million hectares, has been subdivided into sub-watersheds, each of which is approximately 10 km² in area. These sub-watersheds provide a basis for hydrometeorological data analysis. Each sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding the great lakes. The intent is that these sub-watersheds are suitable for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
+The ORMGP jurisdiction, which covers over three-million hectares, has been divided into sub-watersheds, each of which is approximately 10 km² in area. These sub-watersheds provide a basis for hydrometeorological data analysis. Each sub-watershed has a defined topological order in which headwater sub-watersheds can easily be mapped to subsequent downstream sub-watersheds, and so on until feeding one of Lake Huron, Lake Ontario or Lake Simcoe. The intent is that these sub-watersheds are suitable for climatological and water budget analyses. Below is a description of the derivation the v.2020 OWRC 10km² sub-watershed map and its derivatives including:
 
 - a catchment area delineation tool
 - an interpolated real-time daily meteorological dataset dating back to the year 1900
