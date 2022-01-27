@@ -320,7 +320,7 @@ The resulting effective hydraulic conductivity is then reverted back to the near
 
 ## Contributing area delineation {#cat.delin}
 
-One (of many) APIs (application programming interfaces) hosted by the ORMGP leverages the computed drainage topology. Users have the ability to delineate catchment area polygon for any given point that lies within the HDEM extent. Try below:
+One of the many APIs (application programming interfaces) hosted by the ORMGP leverages the computed drainage topology. Users have the ability to delineate catchment area polygon for any given point that lies within the HDEM extent. Try below:
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, out.height='600px', out.width='100%', fig.cap="ORMGP v.2020 HDEM. Click anywhere (within our jurisdiction) to return its contributing area. *Hint: best to click along a watercourse*"}
 knitr::include_app("https://owrc.shinyapps.io/CAdemo/", height = "600px")
